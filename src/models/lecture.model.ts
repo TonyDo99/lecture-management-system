@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import './common.model'
 const { Schema } = mongoose
 
 const lectureSchema = new Schema({
