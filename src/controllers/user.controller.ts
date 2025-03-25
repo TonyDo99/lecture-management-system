@@ -2,12 +2,12 @@
  * Controller for user authentication operations
  * @module auth.controller
  */
-
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import UserModel from '../models/user.model'
 import { IAuthenticatedUser } from '../middlewares/types'
+import { bcryptSync } from '../utils/constant'
 
 /**
  * Registers a new user
@@ -18,12 +18,9 @@ import { IAuthenticatedUser } from '../middlewares/types'
  */
 const userRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-    const salt = bcrypt.genSaltSync(10)
-    const hash = bcrypt.hashSync(req.body.password, salt)
-
     const user = await UserModel.create({
       ...req.body,
-      password: hash
+      password: bcryptSync(req.body.password)
     })
     res.status(201).json(user)
   } catch (error: unknown) {
