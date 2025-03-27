@@ -1,22 +1,22 @@
-import { Schema, plugin } from 'mongoose'
+import { Schema, plugin } from 'mongoose';
 
 export const commonSchema = new Schema(
   {
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
     new: true,
-    timestamps: true
+    timestamps: true,
   }
-)
+);
 
 plugin((schema: Schema) => {
-  schema.add(commonSchema)
-})
+  schema.add(commonSchema);
+});

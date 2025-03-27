@@ -1,14 +1,14 @@
-import { body, param, ValidationChain } from "express-validator";
+import { body, param, ValidationChain } from 'express-validator';
 import {
   userRegister,
   userLogin,
   userInfo,
   userList,
   userDelete,
-} from "../controllers/user.controller";
-import { Router } from "express";
-import { validatePayload } from "../middlewares/validate-request";
-import { passport } from "../middlewares/authenticate";
+} from '../controllers/user.controller';
+import { Router } from 'express';
+import { validatePayload } from '../middlewares/validate-request';
+import { passport } from '../middlewares/authenticate';
 const router = Router();
 
 /**
@@ -17,26 +17,26 @@ const router = Router();
  * @type {Array<ValidationChain>}
  */
 const validateCreate: ValidationChain[] = [
-  body("email")
+  body('email')
     .trim()
     .isEmail()
-    .withMessage("The email not correct format")
+    .withMessage('The email not correct format')
     .notEmpty()
-    .withMessage("The email should not be empty!"),
-  body("password")
+    .withMessage('The email should not be empty!'),
+  body('password')
     .isString()
-    .withMessage("The password must be a string!")
+    .withMessage('The password must be a string!')
     .notEmpty()
-    .withMessage("The password should not be empty!"),
-  body("name")
+    .withMessage('The password should not be empty!'),
+  body('name')
     .trim()
     .isString()
-    .withMessage("The name should be a string!")
+    .withMessage('The name should be a string!')
     .isLength({ max: 50 })
-    .withMessage("The length of name cannot be too over 50 characters")
+    .withMessage('The length of name cannot be too over 50 characters')
     .notEmpty()
-    .withMessage("The name should not be empty!"),
-  body("role").default("user"),
+    .withMessage('The name should not be empty!'),
+  body('role').default('user'),
 ];
 
 /**
@@ -45,17 +45,17 @@ const validateCreate: ValidationChain[] = [
  * @type {Array<ValidationChain>}
  */
 const validateLogin: ValidationChain[] = [
-  body("email")
+  body('email')
     .trim()
     .isEmail()
-    .withMessage("The email not correct format")
+    .withMessage('The email not correct format')
     .notEmpty()
-    .withMessage("The email should not be empty!"),
-  body("password")
+    .withMessage('The email should not be empty!'),
+  body('password')
     .isString()
-    .withMessage("The password must be a string!")
+    .withMessage('The password must be a string!')
     .notEmpty()
-    .withMessage("The password should not be empty!"),
+    .withMessage('The password should not be empty!'),
 ];
 
 /**
@@ -64,12 +64,12 @@ const validateLogin: ValidationChain[] = [
  * @type {Array<ValidationChain>}
  */
 const validateDelete: ValidationChain[] = [
-  param("id")
+  param('id')
     .trim()
     .isString()
-    .withMessage("The id lecture must be a string!")
+    .withMessage('The id lecture must be a string!')
     .notEmpty()
-    .withMessage("The id lecture should not be empty!"),
+    .withMessage('The id lecture should not be empty!'),
 ];
 
 /**
@@ -82,14 +82,14 @@ const validateDelete: ValidationChain[] = [
  * Express router providing user related routes
  * @module routers/user
  */
-router.post("/login", validatePayload(validateLogin), userLogin);
+router.post('/login', validatePayload(validateLogin), userLogin);
 router.get(
-  "/profile",
-  passport.authenticate("jwt", { session: false }),
-  userInfo,
+  '/profile',
+  passport.authenticate('jwt', { session: false }),
+  userInfo
 );
-router.get("/list", passport.authenticate("jwt", { session: false }), userList);
-router.post("/register", validatePayload(validateCreate), userRegister);
-router.delete("/:id", validateDelete, userDelete);
+router.get('/list', passport.authenticate('jwt', { session: false }), userList);
+router.post('/register', validatePayload(validateCreate), userRegister);
+router.delete('/:id', validateDelete, userDelete);
 
 export default router;

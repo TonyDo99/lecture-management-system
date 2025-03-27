@@ -1,13 +1,13 @@
-import PassportJWT, { StrategyOptionsWithoutRequest } from "passport-jwt";
-import passport from "passport";
-import UserModel from "../models/user.model";
+import PassportJWT, { StrategyOptionsWithoutRequest } from 'passport-jwt';
+import passport from 'passport';
+import UserModel from '../models/user.model';
 
 const Strategy = PassportJWT.Strategy;
 const ExtractJwt = PassportJWT.ExtractJwt;
 
 const strategyOpts: StrategyOptionsWithoutRequest = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET || "",
+  secretOrKey: process.env.JWT_SECRET || '',
 };
 
 passport.use(
@@ -25,7 +25,7 @@ passport.use(
     } catch (error) {
       return done(null, error);
     }
-  }),
+  })
 );
 
 export { passport };
