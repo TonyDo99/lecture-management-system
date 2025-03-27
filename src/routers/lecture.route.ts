@@ -1,13 +1,13 @@
-import { Router } from "express";
-import multer from "multer";
+import { Router } from 'express';
+import multer from 'multer';
 import {
   lectureDelete,
   lectureInfo,
   lectureCreate,
   lectureUpdate,
   lectures,
-} from "../controllers/lecture.controller";
-import { body, param, ValidationChain } from "express-validator";
+} from '../controllers/lecture.controller';
+import { body, param, ValidationChain } from 'express-validator';
 
 const router = Router();
 
@@ -24,38 +24,38 @@ const upload = multer({
  * @type {Array<ValidationChain>}
  */
 const validateCreate: ValidationChain[] = [
-  body("title")
+  body('title')
     .trim()
     .isString()
-    .withMessage("The title lecture must be a string!")
+    .withMessage('The title lecture must be a string!')
     .notEmpty()
-    .withMessage("The title lecture should not be empty!")
+    .withMessage('The title lecture should not be empty!')
     .isLength({ min: 5, max: 200 })
     .withMessage(
-      "The title lecture must be between 5 and 100 characters long!",
+      'The title lecture must be between 5 and 100 characters long!'
     ),
-  body("description")
+  body('description')
     .optional({
       checkFalsy: true,
     })
     .trim()
     .isString()
-    .withMessage("The description lecture must be a string!")
+    .withMessage('The description lecture must be a string!')
     .notEmpty()
-    .withMessage("The description lecture should not be empty!")
+    .withMessage('The description lecture should not be empty!')
     .isLength({ min: 10, max: 500 })
     .withMessage(
-      "The description lecture must be between 0 and 500 characters long!",
+      'The description lecture must be between 0 and 500 characters long!'
     ),
-  body("author")
+  body('author')
     .optional({
       checkFalsy: true,
     })
     .trim()
     .isString()
-    .withMessage("The author lecture must be a string!")
+    .withMessage('The author lecture must be a string!')
     .notEmpty()
-    .withMessage("The author lecture should not be empty!"),
+    .withMessage('The author lecture should not be empty!'),
 ];
 
 /**
@@ -64,12 +64,12 @@ const validateCreate: ValidationChain[] = [
  * @type {Array<ValidationChain>}
  */
 const validateDelete: ValidationChain[] = [
-  param("id")
+  param('id')
     .trim()
     .isString()
-    .withMessage("The id lecture must be a string!")
+    .withMessage('The id lecture must be a string!')
     .notEmpty()
-    .withMessage("The id lecture should not be empty!"),
+    .withMessage('The id lecture should not be empty!'),
 ];
 
 /**
@@ -78,19 +78,19 @@ const validateDelete: ValidationChain[] = [
  * @type {Array<ValidationChain>}
  */
 const validateUpdate: ValidationChain[] = [
-  param("id")
+  param('id')
     .trim()
     .isString()
-    .withMessage("The id lecture must be a string!")
+    .withMessage('The id lecture must be a string!')
     .notEmpty()
-    .withMessage("The id lecture should not be empty!"),
+    .withMessage('The id lecture should not be empty!'),
   ...validateCreate,
 ];
 
-router.get("/:id", lectureInfo);
-router.get("/", lectures);
-router.post("/create", validateCreate, upload.single("video"), lectureCreate);
-router.delete("/:id", validateDelete, lectureDelete);
-router.patch("/:id", validateUpdate, upload.single("video"), lectureUpdate);
+router.get('/:id', lectureInfo);
+router.get('/', lectures);
+router.post('/create', validateCreate, upload.single('video'), lectureCreate);
+router.delete('/:id', validateDelete, lectureDelete);
+router.patch('/:id', validateUpdate, upload.single('video'), lectureUpdate);
 
 export default router;

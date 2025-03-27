@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export interface IError extends Error {
   message: string;
@@ -6,10 +6,10 @@ export interface IError extends Error {
 }
 
 export type TExceptionError =
-  | "ControllerLayer"
-  | "ModelLayer"
-  | "RouterLayer"
-  | "MiddlewareLayer";
+  | 'ControllerLayer'
+  | 'ModelLayer'
+  | 'RouterLayer'
+  | 'MiddlewareLayer';
 
 export class ExceptionError extends Error {
   statusCode: number;
@@ -19,7 +19,7 @@ export class ExceptionError extends Error {
     name: TExceptionError,
     statusCode: number,
     code: number,
-    message: string,
+    message: string
   ) {
     super(message);
     this.name = name;
@@ -31,7 +31,7 @@ export class ExceptionError extends Error {
 export function errorHandler(
   error: Error | ExceptionError,
   req: Request,
-  res: Response,
+  res: Response
 ) {
   if (error instanceof ExceptionError) {
     res.status(error.statusCode).json({
@@ -44,7 +44,7 @@ export function errorHandler(
 
   res.status(500).json({
     errors: {
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
       code: 500,
     },
   });
