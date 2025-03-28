@@ -2,6 +2,7 @@ import { body, param, ValidationChain } from 'express-validator';
 import {
   userRegister,
   userLogin,
+  userLogout,
   userInfo,
   userList,
   userDelete,
@@ -83,6 +84,7 @@ const validateDelete: ValidationChain[] = [
  * @module routers/user
  */
 router.post('/login', validatePayload(validateLogin), userLogin);
+router.post('/logout', userLogout);
 router.get(
   '/profile',
   passport.authenticate('jwt', { session: false }),

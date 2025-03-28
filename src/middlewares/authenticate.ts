@@ -1,12 +1,20 @@
 import PassportJWT, { StrategyOptionsWithoutRequest } from 'passport-jwt';
 import passport from 'passport';
 import UserModel from '../models/user.model';
+import { Request } from 'express';
 
 const Strategy = PassportJWT.Strategy;
-const ExtractJwt = PassportJWT.ExtractJwt;
+
+const cookieExtractor = (req: Request) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies['token']; // 'token' is the cookie name
+  }
+  return token;
+};
 
 const strategyOpts: StrategyOptionsWithoutRequest = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: cookieExtractor,
   secretOrKey: process.env.JWT_SECRET || '',
 };
 
@@ -23,7 +31,7 @@ passport.use(
 
       return done(null, false);
     } catch (error) {
-      return done(null, error);
+      return done(error, false);
     }
   })
 );
