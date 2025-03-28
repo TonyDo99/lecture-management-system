@@ -37,5 +37,6 @@ app.get('/health', (_, res) => {
 });
 
 app.listen(process.env.PORT, () => {
+  /* eslint-disable no-console */
   console.log(`Server running on http://localhost:${process.env.PORT}`);
 });

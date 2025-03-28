@@ -61,10 +61,48 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
         role: user.role,
       },
       process.env.JWT_SECRET as string,
-      { expiresIn: 60 * 60 }
+      { expiresIn: '1h' }
     );
 
-    res.status(200).json({ token });
+    // Set httpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      // sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+    });
+
+    res.status(200).json({
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error: unknown) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+/**
+ * Logs out a user by clearing the token cookie
+ * @async
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @returns {Promise<void>} Promise representing completion
+ */
+const userLogout = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
   } catch (error: unknown) {
     res.status(400).json({
       error,
@@ -132,4 +170,4 @@ const userDelete = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { userRegister, userLogin, userInfo, userList, userDelete };
+export { userRegister, userLogin, userLogout, userInfo, userList, userDelete };
