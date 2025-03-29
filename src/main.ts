@@ -47,9 +47,9 @@ app.use(middleware);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
-app.use('/api/user', userRouter);
+app.use('/api/v1/user', userRouter);
 app.use(
-  '/api/lecture',
+  '/api/v1/lecture',
   passport.authenticate('jwt', { session: true }),
   lectureRouter
 );

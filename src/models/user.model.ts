@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 import './common.model';
+import { IAbstractModel } from './common.model';
 const { Schema } = mongoose;
+
+export interface IUser extends IAbstractModel {
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+}
 
 const userSchema = new Schema({
   email: {
