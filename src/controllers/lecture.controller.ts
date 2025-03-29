@@ -115,7 +115,7 @@ const lectureUpdate = async (req: Request, res: Response): Promise<void> => {
 
 const lectures = async (_: Request, res: Response): Promise<void> => {
   try {
-    const lectures = await LectureModel.find({});
+    const lectures = await LectureModel.find();
     res.json(lectures);
   } catch (error) {
     res.status(500).json({ error });

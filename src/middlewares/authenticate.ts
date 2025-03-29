@@ -7,6 +7,7 @@ const Strategy = PassportJWT.Strategy;
 
 const cookieExtractor = (req: Request) => {
   let token = null;
+
   if (req && req.cookies) {
     token = req.cookies['token']; // 'token' is the cookie name
   }
@@ -35,5 +36,13 @@ passport.use(
     }
   })
 );
+
+passport.serializeUser(function (user: Express.User, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user: Express.User, done) {
+  done(null, user);
+});
 
 export { passport };
