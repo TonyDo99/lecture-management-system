@@ -6,6 +6,7 @@ import {
   userInfo,
   userList,
   userDelete,
+  userUpdate,
 } from '../controllers/user.controller';
 import { Router } from 'express';
 import { validatePayload } from '../middlewares/validate-request';
@@ -74,6 +75,21 @@ const validateDelete: ValidationChain[] = [
 ];
 
 /**
+ * Validation rules for update user information
+ * @name validateDelete
+ * @type {Array<ValidationChain>}
+ */
+const validateUpdate: ValidationChain[] = [
+  param('id')
+    .trim()
+    .isString()
+    .withMessage('The id lecture must be a string!')
+    .notEmpty()
+    .withMessage('The id lecture should not be empty!'),
+  ...validateCreate,
+];
+
+/**
  * Routes for user operations
  * @name userRouter
  * @type {Router}
@@ -87,11 +103,12 @@ router.post('/login', validatePayload(validateLogin), userLogin);
 router.post('/logout', userLogout);
 router.get(
   '/profile',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: true }),
   userInfo
 );
-router.get('/list', passport.authenticate('jwt', { session: false }), userList);
+router.get('/list', passport.authenticate('jwt', { session: true }), userList);
 router.post('/register', validatePayload(validateCreate), userRegister);
 router.delete('/:id', validateDelete, userDelete);
+router.patch('/:id', validatePayload(validateUpdate), userUpdate);
 
 export default router;

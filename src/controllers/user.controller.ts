@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.model';
 import { IAuthenticatedUser } from '../middlewares/types';
 import { bcryptSync } from '../utils/constant';
+import { omit } from 'lodash';
 
 /**
  * Registers a new user
@@ -23,7 +24,11 @@ const userRegister = async (req: Request, res: Response): Promise<void> => {
       password: bcryptSync(req.body.password),
       role: 'user',
     });
-    res.status(201).json(user);
+
+    const exclude = ['password'];
+    const userInfo = omit(user.toObject(), exclude);
+
+    res.status(201).json(userInfo);
   } catch (error: unknown) {
     res.status(400).json({
       error,
@@ -42,6 +47,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
@@ -152,14 +158,13 @@ const userList = async (req: Request, res: Response): Promise<void> => {
 const userDelete = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOneAndDelete({ _id: id });
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
 
-    await user.deleteOne();
     res.status(200).send({
       message: 'User deleted successfully',
     });
@@ -170,4 +175,32 @@ const userDelete = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { userRegister, userLogin, userLogout, userInfo, userList, userDelete };
+const userUpdate = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findOneAndUpdate({ _id: id }, req.body);
+
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    res.status(200).send({
+      message: 'User deleted successfully',
+    });
+  } catch (error: unknown) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+export {
+  userRegister,
+  userLogin,
+  userLogout,
+  userInfo,
+  userList,
+  userDelete,
+  userUpdate,
+};
