@@ -14,7 +14,7 @@ const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    // fileSize: 100 * 1024 * 1024, // 100MB limit
+    fileSize: 100 * 1024 * 1024, // 100MB limit
   },
 });
 
@@ -87,10 +87,157 @@ const validateUpdate: ValidationChain[] = [
   ...validateCreate,
 ];
 
+/**
+ * @swagger
+ * /lectures/{id}:
+ *   get:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Lectures
+ *     summary: Get lecture by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lecture details retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Lecture not found
+ */
 router.get('/:id', lectureInfo);
+
+/**
+ * @swagger
+ * /lectures:
+ *   get:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Lectures
+ *     summary: Get all lectures
+ *     responses:
+ *       200:
+ *         description: List of lectures retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
 router.get('/', lectures);
+
+/**
+ * @swagger
+ * /lectures/create:
+ *   post:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Lectures
+ *     summary: Create new lecture
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 minLength: 5
+ *                 maxLength: 200
+ *               description:
+ *                 type: string
+ *                 minLength: 10
+ *                 maxLength: 500
+ *               author:
+ *                 type: string
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Lecture created successfully
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ */
 router.post('/create', validateCreate, upload.single('video'), lectureCreate);
+
+/**
+ * @swagger
+ * /lectures/{id}:
+ *   delete:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Lectures
+ *     summary: Delete lecture
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lecture deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Lecture not found
+ */
 router.delete('/:id', validateDelete, lectureDelete);
+
+/**
+ * @swagger
+ * /lectures/{id}:
+ *   patch:
+ *     security:
+ *       - cookieAuth: []
+ *     tags:
+ *       - Lectures
+ *     summary: Update lecture
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 minLength: 5
+ *                 maxLength: 200
+ *               description:
+ *                 type: string
+ *                 minLength: 10
+ *                 maxLength: 500
+ *               author:
+ *                 type: string
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Lecture updated successfully
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Lecture not found
+ */
 router.patch('/:id', validateUpdate, upload.single('video'), lectureUpdate);
 
 export default router;

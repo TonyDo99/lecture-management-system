@@ -8,7 +8,7 @@ The Lecture Management Server is a backend application that provides APIs for ma
 
 Before you begin, ensure you have the following installed:
 
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - pnpm (v6 or higher)
 - MongoDB (v4 or higher) or Docker for containerized MongoDB
 
@@ -37,14 +37,17 @@ PORT=3000
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/lecture-management
+DB_URI=mongodb://localhost:27017/lecture-management
 
 # JWT Configuration
 JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRATION=24h
 
-# Optional: Logging
-LOG_LEVEL=info
+# AWS Configuration
+AWS_S3_BUCKET=s3_bucket_urn
+AWS_S3_OBJECTS_FOLDER=s3_objects_folder
+AWS_ACCESS_KEY_ID=aws_access_key_id
+AWS_SECRET_ACCESS_KEY=aws_secret_access_key
+JWT_SECRET=secret_token
 ```
 
 ## 📜 Available Scripts
@@ -122,13 +125,5 @@ docker-compose down
 When using the dockerized MongoDB, connect using:
 
 ```
-MONGODB_URI=mongodb://localhost:27017/lecture-management
+DB_URI=mongodb://localhost:27017/lecture-management
 ```
-
-## 📝 License
-
-[MIT](LICENSE)
-
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
