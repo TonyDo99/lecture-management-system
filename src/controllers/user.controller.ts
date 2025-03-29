@@ -73,8 +73,8 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     // Set httpOnly cookie
     res.cookie('token', token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      // sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+      sameSite: 'none', // Required for cross-origin cookies
       maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
     });
 
