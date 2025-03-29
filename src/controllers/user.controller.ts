@@ -178,7 +178,13 @@ const userDelete = async (req: Request, res: Response): Promise<void> => {
 const userUpdate = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const user = await UserModel.findOneAndUpdate({ _id: id }, req.body);
+    const user = await UserModel.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+        password: bcryptSync(req.body.password),
+      }
+    );
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });
@@ -186,7 +192,7 @@ const userUpdate = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.status(200).send({
-      message: 'User deleted successfully',
+      message: 'User updated successfully',
     });
   } catch (error: unknown) {
     res.status(400).json({

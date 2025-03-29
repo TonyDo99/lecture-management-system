@@ -10,7 +10,9 @@ import userRouter from './routers/user.route';
 import lectureRouter from './routers/lecture.route';
 import { passport } from './middlewares/authenticate';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
+import { swaggerDocs } from './services/api.docs';
 
 const app = express();
 
@@ -41,6 +43,8 @@ const middleware = [
   }),
 ];
 app.use(middleware);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 app.use('/api/user', userRouter);
