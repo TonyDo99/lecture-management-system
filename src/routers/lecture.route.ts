@@ -59,35 +59,6 @@ const validateCreate: ValidationChain[] = [
 ];
 
 /**
- * Validation rules for delete lecture
- * @name validateDelete
- * @type {Array<ValidationChain>}
- */
-const validateDelete: ValidationChain[] = [
-  param('id')
-    .trim()
-    .isString()
-    .withMessage('The id lecture must be a string!')
-    .notEmpty()
-    .withMessage('The id lecture should not be empty!'),
-];
-
-/**
- * Validation rules for delete lecture
- * @name validateUpdate
- * @type {Array<ValidationChain>}
- */
-const validateUpdate: ValidationChain[] = [
-  param('id')
-    .trim()
-    .isString()
-    .withMessage('The id lecture must be a string!')
-    .notEmpty()
-    .withMessage('The id lecture should not be empty!'),
-  ...validateCreate,
-];
-
-/**
  * @swagger
  * /lectures/{id}:
  *   get:
@@ -169,6 +140,20 @@ router.get('/', lectures);
 router.post('/create', validateCreate, upload.single('video'), lectureCreate);
 
 /**
+ * Validation rules for delete lecture
+ * @name validateDelete
+ * @type {Array<ValidationChain>}
+ */
+const validateDelete: ValidationChain[] = [
+  param('id')
+    .trim()
+    .isString()
+    .withMessage('The id lecture must be a string!')
+    .notEmpty()
+    .withMessage('The id lecture should not be empty!'),
+];
+
+/**
  * @swagger
  * /lectures/{id}:
  *   delete:
@@ -192,6 +177,21 @@ router.post('/create', validateCreate, upload.single('video'), lectureCreate);
  *         description: Lecture not found
  */
 router.delete('/:id', validateDelete, lectureDelete);
+
+/**
+ * Validation rules for delete lecture
+ * @name validateUpdate
+ * @type {Array<ValidationChain>}
+ */
+const validateUpdate: ValidationChain[] = [
+  param('id')
+    .trim()
+    .isString()
+    .withMessage('The id lecture must be a string!')
+    .notEmpty()
+    .withMessage('The id lecture should not be empty!'),
+  ...validateCreate,
+];
 
 /**
  * @swagger
