@@ -22,7 +22,6 @@ const userRegister = async (req: Request, res: Response): Promise<void> => {
     const user = await UserModel.create({
       ...req.body,
       password: bcryptSync(req.body.password),
-      role: 'user',
     });
 
     const exclude = ['password'];
@@ -74,7 +73,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Secure cookies in production
-      sameSite: 'none', // Required for cross-origin cookies
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-origin cookies
       maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
     });
 

@@ -262,6 +262,7 @@ const validateUpdate: ValidationChain[] = [
  */
 router.patch(
   '/:id',
+  passport.authenticate('jwt', { session: true }),
   guard('update'),
   validatePayload(validateUpdate),
   userUpdate
