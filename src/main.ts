@@ -18,13 +18,7 @@ const app = express();
 
 // Middleware
 const middleware = [
-  cors({
-    origin: [
-      'http://localhost:3000',
-      'https://fe-lecture-management-system.vercel.app',
-    ],
-    credentials: true,
-  }),
+  cors(),
   bodyParser.json(),
   bodyParser.urlencoded({ extended: true }),
   express.json(),
@@ -42,6 +36,7 @@ const middleware = [
     },
   }),
 ];
+
 app.use(middleware);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
