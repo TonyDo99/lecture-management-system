@@ -1,5 +1,12 @@
 import { Schema, plugin } from 'mongoose';
 
+export interface IAbstractModel {
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+}
+
 export const commonSchema = new Schema(
   {
     createdAt: {

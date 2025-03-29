@@ -8,6 +8,7 @@ import {
   lectures,
 } from '../controllers/lecture.controller';
 import { body, param, ValidationChain } from 'express-validator';
+import { guard } from '../middlewares/rbac';
 
 const router = Router();
 
@@ -81,7 +82,7 @@ const validateCreate: ValidationChain[] = [
  *       404:
  *         description: Lecture not found
  */
-router.get('/:id', lectureInfo);
+router.get('/:id', guard('detail'), lectureInfo);
 
 /**
  * @swagger
@@ -98,7 +99,7 @@ router.get('/:id', lectureInfo);
  *       401:
  *         description: Unauthorized
  */
-router.get('/', lectures);
+router.get('/', guard('view'), lectures);
 
 /**
  * @swagger
@@ -137,7 +138,13 @@ router.get('/', lectures);
  *       401:
  *         description: Unauthorized
  */
-router.post('/create', validateCreate, upload.single('video'), lectureCreate);
+router.post(
+  '/create',
+  guard('create'),
+  validateCreate,
+  upload.single('video'),
+  lectureCreate
+);
 
 /**
  * Validation rules for delete lecture
@@ -176,7 +183,7 @@ const validateDelete: ValidationChain[] = [
  *       404:
  *         description: Lecture not found
  */
-router.delete('/:id', validateDelete, lectureDelete);
+router.delete('/:id', guard('delete'), validateDelete, lectureDelete);
 
 /**
  * Validation rules for delete lecture
@@ -238,6 +245,12 @@ const validateUpdate: ValidationChain[] = [
  *       404:
  *         description: Lecture not found
  */
-router.patch('/:id', validateUpdate, upload.single('video'), lectureUpdate);
+router.patch(
+  '/:id',
+  guard('update'),
+  validateUpdate,
+  upload.single('video'),
+  lectureUpdate
+);
 
 export default router;

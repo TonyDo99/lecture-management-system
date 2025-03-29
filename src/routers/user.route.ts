@@ -11,6 +11,7 @@ import {
 import { Router } from 'express';
 import { validatePayload } from '../middlewares/validate-request';
 import { passport } from '../middlewares/authenticate';
+import { guard } from '../middlewares/rbac';
 const router = Router();
 
 /**
@@ -85,6 +86,7 @@ router.post('/logout', userLogout);
 router.get(
   '/profile',
   passport.authenticate('jwt', { session: true }),
+  guard('detail'),
   userInfo
 );
 
@@ -101,7 +103,12 @@ router.get(
  *       200:
  *         description: Users list retrieved successfully
  */
-router.get('/list', passport.authenticate('jwt', { session: true }), userList);
+router.get(
+  '/list',
+  passport.authenticate('jwt', { session: true }),
+  guard('view'),
+  userList
+);
 
 /**
  * Validation rules for user registration
@@ -157,7 +164,12 @@ const validateCreate: ValidationChain[] = [
  *       201:
  *         description: User registered successfully
  */
-router.post('/register', validatePayload(validateCreate), userRegister);
+router.post(
+  '/register',
+  validatePayload(validateCreate),
+  guard('create'),
+  userRegister
+);
 
 /**
  * Validation rules for delete user
@@ -193,6 +205,7 @@ const validateDelete: ValidationChain[] = [
 router.delete(
   '/:id',
   passport.authenticate('jwt', { session: true }),
+  guard('delete'),
   validateDelete,
   userDelete
 );
@@ -252,6 +265,11 @@ const validateUpdate: ValidationChain[] = [
  *       200:
  *         description: User updated successfully
  */
-router.patch('/:id', validatePayload(validateUpdate), userUpdate);
+router.patch(
+  '/:id',
+  guard('update'),
+  validatePayload(validateUpdate),
+  userUpdate
+);
 
 export default router;
