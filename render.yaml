@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: lecture-service-api
+    runtime: node
+    repo: https://github.com/TonyDo99/lecture-management-system.git
+    branch: main
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm start
+    plan: free
+    autoDeploy: true
